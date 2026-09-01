@@ -1,0 +1,419 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Statement Preview
+{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet"
+      href="{% static 'css/transactions/preview_statement.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="preview-page">
+
+    <div class="preview-container">
+
+        <!-- ==========================================
+                        PAGE HEADER
+        =========================================== -->
+
+        <div class="preview-header">
+
+            <div class="header-left">
+
+                <span class="preview-badge">
+
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+
+                    FinSync AI
+
+                </span>
+
+                <h1>
+
+                    Statement Preview
+
+                </h1>
+
+                <p>
+
+                    Review every imported transaction before saving it
+                    permanently to your account.
+
+                </p>
+
+            </div>
+
+            <button id="importBtn"
+                    class="import-btn">
+
+                <i class="fa-solid fa-download"></i>
+
+                Import Transactions
+
+            </button>
+
+        </div>
+
+        <!-- ==========================================
+                        SUMMARY
+        =========================================== -->
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+
+                <div class="summary-icon purple">
+
+                    <i class="fa-solid fa-list"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+
+                        {{ transaction_count }}
+
+                    </h2>
+
+                    <span>
+
+                        Transactions
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="summary-card">
+
+                <div class="summary-icon green">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+
+                        ₹{{ total_income|floatformat:2 }}
+
+                    </h2>
+
+                    <span>
+
+                        Total Income
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="summary-card">
+
+                <div class="summary-icon blue">
+
+                    <i class="fa-solid fa-brain"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+
+                        ₹{{ total_expense|floatformat:2 }}
+
+                    </h2>
+
+                    <span>
+
+                        Total Expenses
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="summary-card">
+
+                <div class="summary-icon orange">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+
+                        {{ duplicate_count }}
+
+                    </h2>
+
+                    <span>
+
+                        Duplicates Found
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ==========================================
+                        TABLE
+        =========================================== -->
+
+        <div class="table-card">
+
+            <div class="table-header">
+
+                <h3>
+
+                    Imported Transactions
+
+                </h3>
+
+                <span>
+
+                    Review before importing
+
+                </span>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="preview-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+
+                            <th>Description</th>
+
+                            <th>Merchant</th>
+
+                            <th>Category</th>
+
+                            <th>Type</th>
+
+                            <th>Amount</th>
+
+                            <th>Confidence</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for tx in transactions %}
+
+                        <tr class="{% if tx.is_duplicate %}duplicate-row{% endif %}">
+
+                            <td>
+
+                                {{ tx.date }}
+
+                            </td>
+
+                            <td>
+
+                                <div class="description-cell">
+
+                                    {{ tx.description }}
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <span class="merchant-name">
+
+                                    {{ tx.merchant|title }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span class="category-pill">
+
+                                    {{ tx.category }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                {% if tx.type == "income" %}
+
+                                <span class="type income">
+
+                                    <i class="fa-solid fa-arrow-trend-up"></i>
+
+                                    Income
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="type expense">
+
+                                    <i class="fa-solid fa-arrow-trend-down"></i>
+
+                                    Expense
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if tx.type == "income" %}
+
+                                <span class="amount income">
+
+                                    + ₹{{ tx.amount }}
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="amount expense">
+
+                                    - ₹{{ tx.amount }}
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if tx.confidence >= 0.90 %}
+
+                                <span class="confidence high">
+
+                                    🟢 {{ tx.confidence|floatformat:0 }}%
+
+                                </span>
+
+                                {% elif tx.confidence >= 0.60 %}
+
+                                <span class="confidence medium">
+
+                                    🟡 {{ tx.confidence|floatformat:0 }}%
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="confidence low">
+
+                                    🔴 {{ tx.confidence|floatformat:0 }}%
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if tx.is_duplicate %}
+
+                                <span class="status duplicate">
+
+                                    <i class="fa-solid fa-copy"></i>
+
+                                    Duplicate
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="status new">
+
+                                    <i class="fa-solid fa-circle-check"></i>
+
+                                    New
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById("importBtn").addEventListener("click", async () => {
+
+    const response = await fetch(
+        "{% url 'transactions:confirm_import' %}",
+        {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+
+        showToast(
+`Imported : ${data.result.imported}\nDuplicates : ${data.result.duplicates}\nFailed : ${data.result.failed}`,
+            "success",
+            "Import Completed"
+        );
+
+        window.location.href =
+        "{% url 'transactions:index' %}";
+    }
+
+});
+
+</script>
+
+{% endblock %}

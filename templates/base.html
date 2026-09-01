@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+
+    <!-- Apply theme BEFORE any CSS to avoid FOUC -->
+    <script>
+      (function() {
+          try {
+              var mode = localStorage.getItem('finsync-theme') || 'dark';
+              var media = window.matchMedia('(prefers-color-scheme: light)');
+              var effective = mode === 'system' ? (media.matches ? 'light' : 'dark') : mode;
+              document.documentElement.setAttribute('data-theme', effective);
+              document.documentElement.setAttribute('data-theme-mode', mode);
+          } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/toast.css' %}">
+    <link rel="stylesheet" href="{% static 'css/transactions/import_statement.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mobile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/finsync-shared.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    {% block extra_css %}{% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</head>
+
+<body>
+
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-content">
+            <img src="{% static 'images/favicon.png' %}" alt="FinSync AI Logo" class="loader-logo">
+            <h2>FinSync AI</h2>
+        </div>
+    </div>
+
+    <!-- Cursor Glow (hidden on light theme via CSS) -->
+    <div class="cursor-glow"></div>
+
+    <div id="sidebar-overlay"></div>
+
+    {% block content %}{% endblock %}
+
+    {% include "components/toast.html" %}
+
+    {% block extra_js %}{% endblock %}
+
+    <!-- Global navbar behaviour (bell dropdown, theme toggle, profile menu) -->
+    {% if user.is_authenticated %}
+    <script src="{% static 'js/dashboard/navbar.js' %}"></script>
+    <script src="{% static 'js/components/finsync-toast.js' %}"></script>
+    {% endif %}
+
+</body>
+</html>

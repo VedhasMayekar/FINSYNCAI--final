@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Import Bank Statement
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet"
+      href="{% static 'css/transactions/import_statement.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="statement-page">
+
+    <div class="statement-container">
+
+        <!-- =======================================
+                    HERO
+        ======================================== -->
+
+        <div class="statement-header">
+
+            <span class="page-badge">
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                FinSync AI
+
+            </span>
+
+            <h1>
+
+                Import Bank Statement
+
+            </h1>
+
+            <p>
+
+                Securely import transactions from your bank statement.
+                FinSync AI extracts only transaction details and never stores
+                sensitive banking information.
+
+            </p>
+
+        </div>
+
+        <!-- =======================================
+                  UPLOAD CARD
+        ======================================== -->
+
+        <form method="POST"
+              enctype="multipart/form-data"
+              id="uploadForm"
+              class="upload-card">
+
+            {% csrf_token %}
+
+            {{ form.statement }}
+
+            <div class="upload-icon">
+
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+
+            </div>
+
+            <h2>
+
+                Drag & Drop Statement
+
+            </h2>
+
+            <p>
+
+                or click anywhere below to browse
+
+            </p>
+
+            <div class="upload-dropzone" id="browseButton">
+
+                <div class="dropzone-icon">
+
+                    <i id="dropzoneIcon"
+                       class="fa-solid fa-cloud-arrow-up"></i>
+
+                </div>
+
+                <h3 id="dropzoneTitle">
+
+                    Drag & Drop Statement
+
+                </h3>
+
+                <p id="dropzoneSubtitle">
+
+                    or click anywhere to browse
+
+                </p>
+
+                <div class="supported-types">
+
+                    <span>CSV</span>
+
+                    <span>Excel</span>
+
+                    <span>PDF</span>
+
+                </div>
+
+                <div id="filePreview"
+                     class="file-preview">
+
+                    No file selected
+
+                </div>
+
+                <div id="progressContainer"
+                     class="progress-container">
+
+                    <div id="progressBar"
+                         class="progress-bar">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="selectedFile"
+                 class="selected-file">
+
+                No file selected
+
+            </div>
+
+            <div class="upload-footer">
+
+                <span>
+
+                    Maximum Size : 25 MB
+
+                </span>
+
+                <button type="submit"
+                        id="uploadButton"
+                        class="upload-btn"
+                        disabled>
+
+                    Continue
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </form>
+
+        <!-- =======================================
+                 PRIVACY CARD
+        ======================================== -->
+
+        <div class="privacy-card">
+
+            <div class="privacy-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+            <div class="privacy-content">
+
+                <h3>
+
+                    Privacy & Security
+
+                </h3>
+
+                <ul>
+
+                    <li>
+
+                        Account numbers are never stored.
+
+                    </li>
+
+                    <li>
+
+                        Only transaction details are imported.
+
+                    </li>
+
+                    <li>
+
+                        Duplicate transactions are detected automatically.
+
+                    </li>
+
+                    <li>
+
+                        Your original bank statement is never modified.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/transactions/import_statement.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="login-page">
+
+    <div class="login-container">
+
+        <!-- LEFT -->
+
+        <div class="login-left">
+
+            <div class="login-logo">
+                💰
+            </div>
+
+            <h1>Create Account</h1>
+
+            <p>
+                Join FinSync AI and start managing your finances smarter.
+            </p>
+
+            {% if form.errors %}
+
+            <div class="error-card">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <div>
+
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                    {% endfor %}
+
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="input-group">
+
+                    <label>Username</label>
+
+                    {{ form.username }}
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Email</label>
+
+                    {{ form.email }}
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Password</label>
+
+                    <div class="password-box">
+
+                        {{ form.password }}
+
+                        <i class="fa-solid fa-eye togglePassword"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Confirm Password</label>
+
+                    <div class="password-box">
+
+                        {{ form.confirm_password }}
+
+                        <i class="fa-solid fa-eye togglePassword"></i>
+
+                    </div>
+
+                </div>
+
+                <div id="strengthText"></div>
+
+                <div id="matchText"></div>
+
+                <label class="remember">
+
+                    <input type="checkbox" required>
+
+                    I agree to the Terms & Privacy Policy
+
+                </label>
+
+                <button class="login-btn">
+
+                    Create Account
+
+                </button>
+
+            </form>
+
+            <p class="signup-link">
+
+                Already have an account?
+
+                <a href="{% url 'accounts:login' %}">
+
+                    Login
+
+                </a>
+
+            </p>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="login-right">
+
+            <h2>
+
+                Welcome to<br>
+
+                FinSync AI
+
+            </h2>
+
+            <p>
+
+                Create your account once and unlock AI-powered personal finance.
+
+            </p>
+
+            {% load socialaccount %}
+
+            <a href="{% provider_login_url 'google' %}" class="google-btn">
+
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+
+                Sign up with Google
+
+            </a>
+
+            <div class="divider">
+
+                <span>Benefits</span>
+
+            </div>
+
+            <div class="feature-list">
+
+                <div class="feature-item">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    Automatic Gmail Sync
+
+                </div>
+
+                <div class="feature-item">
+
+                    <i class="fa-solid fa-brain"></i>
+
+                    AI Expense Categorization
+
+                </div>
+
+                <div class="feature-item">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    Investment Tracking
+
+                </div>
+
+                <div class="feature-item">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Bank-grade Security
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="{% static 'js/signup.js' %}"></script>
+
+{% endblock %}

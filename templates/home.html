@@ -1,0 +1,512 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+FinSync AI | AI Powered Personal Finance Platform
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar">
+    <div class="logo">
+        <img src="{% static 'images/favicon.png' %}" alt="FinSync AI Logo">
+        <span>FinSync AI</span>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#workflow">How it Works</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+
+    <div class="nav-buttons">
+
+        <a href="{% url 'accounts:login' %}" class="login-btn">
+            Login
+        </a>
+
+        <a href="{% url 'accounts:signup' %}" class="signup-btn">
+            Sign Up
+        </a>
+
+    </div>
+</nav>
+
+
+<section class="hero">
+    <div class="hero-left">
+        <h1 class="hero-title">
+
+            Track Every Rupee.<br>
+            Plan Every Investment.<br>
+
+            <span class="gradient-text">
+                Powered by AI.
+            </span>
+
+        </h1>
+        <p>
+
+            Connect your Gmail, automatically import bank transactions,
+            analyze your spending, and receive personalized financial
+            insights—all from one intelligent dashboard.
+
+        </p>
+        <a href="{% url 'accounts:signup' %}" class="hero-btn">
+
+            Get Started
+
+        </a>
+    </div>
+
+    <div class="hero-right">
+
+        <img src="{% static 'images/hero-board.png' %}"
+             alt="Financial Analytics"
+             class="hero-chart">
+
+    </div>
+
+</section>
+
+<section class="features reveal" id="features">
+    <h2>Why Choose FinSync AI?</h2>
+    <p class="feature-subtitle">
+        Everything you need to manage your finances intelligently.
+    </p>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+
+            <h3>Gmail Auto Sync</h3>
+
+            <p>
+                Automatically detects and imports bank transaction emails.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+
+            <h3>AI Expense Analysis</h3>
+
+            <p>
+                Categorizes expenses and gives smart spending insights.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <h3>Investment Planner</h3>
+
+            <p>
+                Personalized SIP and investment suggestions based on your goals.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+
+            <h3>AI Financial Assistant</h3>
+
+            <p>
+                Ask questions about your spending and receive intelligent answers.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="workflow reveal" id="workflow">
+    <h2>How FinSync AI Works</h2>
+    <p class="workflow-subtitle">
+        Just four simple steps to automate your financial life.
+    </p>
+    <div class="workflow-container">
+
+        <div class="step">
+
+            <div class="step-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+
+            <h3>Login Securely</h3>
+
+            <p>
+                Sign in using your Google account with secure OAuth authentication.
+            </p>
+
+        </div>
+
+        <div class="step-arrow">
+            ➜
+        </div>
+
+        <div class="step">
+
+            <div class="step-icon">
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+
+            <h3>Connect Gmail</h3>
+
+            <p>
+                Allow FinSync AI to read only bank transaction emails.
+            </p>
+
+        </div>
+
+        <div class="step-arrow">
+            ➜
+        </div>
+
+        <div class="step">
+
+            <div class="step-icon">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+
+            <h3>AI Analysis</h3>
+
+            <p>
+                AI categorizes transactions, spending habits and investments.
+            </p>
+
+        </div>
+
+        <div class="step-arrow">
+            ➜
+        </div>
+
+        <div class="step">
+
+            <div class="step-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <h3>Smart Dashboard</h3>
+
+            <p>
+                View analytics, insights and personalized investment suggestions.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="dashboard-preview reveal" id="dash">
+
+    <div class="preview-left">
+
+        <div class="section-tag">
+            📊 Live AI Dashboard
+        </div>
+
+        <h2>
+            Everything In One
+            <span class="gradient-text">Smart Dashboard</span>
+        </h2>
+
+        <p>
+            Monitor expenses, investments, savings, and AI-generated insights
+            from one beautifully designed dashboard.
+        </p>
+
+        <div class="dashboard-features">
+
+            <span>📧 Gmail Sync</span>
+
+            <span>💳 Expense Tracking</span>
+
+            <span>📈 Investments</span>
+
+            <span>🤖 AI Insights</span>
+
+            <span>📊 Analytics</span>
+
+            <span>💰 Health Score</span>
+
+        </div>
+
+        <button class="hero-btn">
+            View Dashboard
+        </button>
+
+    </div>
+
+    <div class="preview-right">
+
+        <div class="dashboard-card">
+
+            <div class="balance-box">
+
+                <span>Total Balance</span>
+
+                <h2>₹54,320</h2>
+
+            </div>
+
+            <div class="mini-cards">
+
+                <div class="mini-card">
+
+                    <span>Income</span>
+
+                    <h3>₹72,000</h3>
+
+                </div>
+
+                <div class="mini-card">
+
+                    <span>Expenses</span>
+
+                    <h3>₹18,450</h3>
+
+                </div>
+
+            </div>
+
+            <div class="transactions">
+
+                <h3>Recent Transactions</h3>
+
+                <div class="transaction">
+
+                    <div>
+
+                        🛒 Amazon
+
+                    </div>
+
+                    <span class="expense">-₹2,199</span>
+
+                </div>
+
+                <div class="transaction">
+
+                    <span>Salary</span>
+
+                    <span class="income">+₹72,000</span>
+
+                </div>
+
+                <div class="transaction">
+
+                    <span>Swiggy</span>
+
+                    <span class="expense">-₹456</span>
+
+                </div>
+
+            </div>
+
+            <div class="ai-box">
+
+                <h4>🤖 AI Recommendation</h4>
+
+                <p>Food spending decreased by <b>12%</b>.</p>
+
+                <p>Your savings increased by <b>18%</b>.</p>
+
+                <p>Suggested SIP: <b>₹5,000/month</b>.</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="about reveal" id="about">
+
+    <div class="about-image">
+
+        <img src="{% static 'images/usp-img.png' %}"
+             alt="FinSync AI"
+             class="about-img">
+
+    </div>
+
+    <div class="about-content">
+
+        <span class="section-tag">✨ About FinSync AI</span>
+
+        <h2>
+            Built for Modern
+            <span class="gradient-text">Personal Finance</span>
+        </h2>
+
+        <p>
+            FinSync AI automatically reads your bank transaction emails,
+            categorizes spending using AI, tracks investments,
+            and delivers personalized financial insights—
+            all from one secure dashboard.
+        </p>
+
+        <div class="about-grid">
+
+            <div class="about-box">
+
+                <h3>
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span class="counter" data-target="98.7">0</span>%
+                </h3>
+
+                <span>Accurate Parsing</span>
+
+            </div>
+
+            <div class="about-box">
+
+                <h3>
+                    <i class="fa-solid fa-clock"></i>
+                    <span class="counter" data-target="24">0</span>/7
+                </h3>
+
+                <span>AI Assistant</span>
+
+            </div>
+
+            <div class="about-box">
+
+                <h3>
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span class="counter" data-target="100">0</span>%
+                </h3>
+
+                <span>Secure Login</span>
+
+            </div>
+
+            <div class="about-box">
+
+                <h3>
+                    <i class="fa-solid fa-brain"></i>
+                    AI
+                </h3>
+
+                <span>Personalized Insights</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer class="footer reveal">
+
+    <div class="footer-top">
+
+        <div class="footer-brand">
+
+            <h2>💰 FinSync AI</h2>
+
+            <p>
+                AI-powered personal finance platform that automatically
+                tracks expenses, analyzes spending, and helps you make
+                smarter investment decisions.
+            </p>
+
+            <div class="footer-social">
+
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+
+                <a href="#"><i class="fa-brands fa-google"></i></a>
+
+                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <div>
+
+                <h4>Product</h4>
+
+                <a href="#features">Features</a>
+
+                <a href="#dash">Dashboard</a>
+
+                <a href="#about">AI Assistant</a>
+
+                <a href="#">Investments</a>
+
+            </div>
+
+            <div>
+
+                <h4>Company</h4>
+
+                <a href="#">About</a>
+
+                <a href="#">Privacy Policy</a>
+
+                <a href="#">Terms</a>
+
+                <a href="#">Contact</a>
+
+            </div>
+
+            <div>
+
+                <h4>Resources</h4>
+
+                <a href="#">Documentation</a>
+
+                <a href="#">FAQs</a>
+
+                <a href="#">Support</a>
+
+                <a href="#">Blog</a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="footer-bottom">
+
+        <span>© 2026 FinSync AI. All rights reserved.</span>
+
+        <span>Made using Django & AI</span>
+
+    </div>
+
+</footer>
+
+{% endblock %}
