@@ -74,6 +74,42 @@ class UserProfile(models.Model):
         return " ".join(parts) or self.display_name or u.username
 
 
+class EmailVerification(models.Model):
+    """
+    One-time email OTP verification state for a user.
+
+    Lives in its own table so existing User / UserProfile rows are never
+    restructured. A user WITHOUT a row here predates the OTP feature and is
+    treated as verified (see accounts.otp.is_email_verified).
+    """
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="email_verification",
+    )
+
+    is_verified = models.BooleanField(default=False)
+    verified_at = models.DateTimeField(blank=True, null=True)
+
+    # Hashed code + policy state (never store the plain OTP)
+    otp_hash = models.CharField(max_length=64, blank=True)
+    otp_expiry = models.DateTimeField(blank=True, null=True)
+    otp_attempts = models.PositiveIntegerField(default=0)
+    otp_last_sent_at = models.DateTimeField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Email verification"
+        verbose_name_plural = "Email verifications"
+
+    def __str__(self):
+        state = "verified" if self.is_verified else "pending"
+        return f"EmailVerification<{self.user.username} · {state}>"
+
+
 def _create_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.get_or_create(user=instance)

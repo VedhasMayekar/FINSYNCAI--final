@@ -4,6 +4,15 @@ from django.contrib.auth.models import User
 
 class SignupForm(forms.ModelForm):
 
+    # User.email is optional at the model level, but email verification
+    # (OTP) requires one — so the signup form must enforce it.
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            "placeholder": "Enter email"
+        }),
+    )
+
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "placeholder": "Enter password"

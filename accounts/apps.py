@@ -8,3 +8,5 @@ class AccountsConfig(AppConfig):
     def ready(self):
         # Signals live in models.py — importing them ensures they register.
         from . import models  # noqa: F401
+        # OTP verification signal (Google/social signups).
+        from . import signals  # noqa: F401

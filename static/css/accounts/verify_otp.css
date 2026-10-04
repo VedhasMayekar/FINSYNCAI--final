@@ -1,0 +1,192 @@
+/* ==========================================================
+   FINSYNC AI · EMAIL OTP VERIFICATION
+   Reuses the login split-screen (login.css) + theme tokens.
+   ========================================================== */
+
+.hidden { display: none !important; }
+
+/* Success variant of the .error-card alert */
+.otp-alert-success {
+    background: rgba(34, 197, 94, .08) !important;
+    border-color: rgba(34, 197, 94, .25) !important;
+    color: #b8f2cd !important;
+}
+.otp-alert-success i { color: var(--success) !important; }
+
+.otp-email { color: var(--text-primary); }
+
+/* ---------- Six-digit code inputs ---------- */
+.otp-form { margin-top: 6px; }
+.otp-inputs {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin: 14px 0 20px;
+}
+.otp-input {
+    width: 100%;
+    height: 56px;
+    padding: 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    font-family: inherit;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 14px;
+    background: #161616;
+    color: #fff;
+    caret-color: var(--primary);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+.otp-input::placeholder { color: var(--text-muted); }
+.otp-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 18px rgba(139, 92, 246, .28);
+}
+.otp-input.filled {
+    border-color: var(--primary);
+    background: rgba(139, 92, 246, .12);
+}
+
+/* Error feedback */
+.otp-inputs.shake { animation: otp-shake .4s cubic-bezier(.36, .07, .19, .97); }
+@keyframes otp-shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+}
+
+/* ---------- Submit button ---------- */
+.otp-submit.is-loading { opacity: .75; pointer-events: none; }
+.otp-submit.is-success {
+    background: var(--success);
+    box-shadow: 0 6px 18px rgba(34, 197, 94, .28);
+}
+
+/* ---------- Resend row ---------- */
+.otp-resend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.otp-resend-btn {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-light);
+}
+.otp-resend-btn:hover:not(:disabled) { color: var(--primary); }
+.otp-resend-btn:disabled {
+    color: var(--text-muted);
+    cursor: not-allowed;
+    font-weight: 400;
+}
+.otp-countdown { color: var(--text-muted); font-size: 13.5px; }
+
+/* ---------- Dev-mode banner (DEBUG only) ---------- */
+.otp-dev {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(139, 92, 246, .1);
+    border: 1px solid rgba(139, 92, 246, .3);
+    color: #c4b5fd;
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin: 16px 0 0;
+    font-size: 13.5px;
+}
+.otp-dev i { margin-top: 2px; color: var(--primary-light); }
+.otp-dev strong { display: block; font-size: 13px; }
+.otp-dev code {
+    font-weight: 800;
+    letter-spacing: .14em;
+    color: var(--primary-light);
+    font-family: inherit;
+}
+
+/* ---------- Static helper tip ---------- */
+.otp-tip {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin: 12px 0 0;
+}
+.otp-tip i { margin-right: 6px; color: var(--primary); }
+
+/* ---------- Right-aside status card ---------- */
+.otp-status-card {
+    margin-top: 28px;
+    background: rgba(18, 18, 18, .6);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 16px;
+    padding: 16px 18px;
+}
+.otp-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.otp-status-row strong {
+    color: var(--primary-light);
+    font-weight: 600;
+    font-size: 13.5px;
+}
+.otp-status-row strong.is-done { color: var(--success); }
+.otp-progress {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .08);
+    margin-top: 12px;
+    overflow: hidden;
+}
+.otp-progress span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    transition: width .4s ease;
+}
+
+/* ---------- Light theme tweaks ---------- */
+[data-theme='light'] .otp-input {
+    background: #fff;
+    border-color: rgba(139, 92, 246, .25);
+    color: var(--text-primary);
+}
+[data-theme='light'] .otp-input.filled { background: rgba(139, 92, 246, .08); }
+[data-theme='light'] .otp-status-card {
+    background: rgba(247, 245, 255, .8);
+    border-color: rgba(139, 92, 246, .15);
+}
+[data-theme='light'] .otp-alert-success {
+    background: rgba(22, 163, 74, .08) !important;
+    border-color: rgba(22, 163, 74, .25) !important;
+    color: var(--success) !important;
+}
+[data-theme='light'] .otp-dev {
+    background: rgba(139, 92, 246, .08);
+    border-color: rgba(139, 92, 246, .25);
+    color: var(--primary-dark);
+}
+[data-theme='light'] .otp-dev code { color: var(--primary-dark); }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 420px) {
+    .otp-inputs { gap: 7px; }
+    .otp-input { height: 48px; font-size: 19px; }
+}

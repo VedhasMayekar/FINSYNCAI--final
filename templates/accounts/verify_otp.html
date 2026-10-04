@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Verify your email — FinSync AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/accounts/verify_otp.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="login-page">
+
+    <div class="login-container">
+
+        <!-- LEFT -->
+
+        <div class="login-left">
+
+            <div class="login-logo">
+                💰
+            </div>
+
+            <h1>Verify your email</h1>
+
+            <p>
+                We sent a 6-digit code to
+                <strong class="otp-email">{{ masked_email }}</strong>.
+                Enter it below to activate your workspace.
+            </p>
+
+            {% if dev_code %}
+            <div class="otp-dev">
+                <i class="fa-solid fa-flask"></i>
+                <div>
+                    <strong>Development mode</strong>
+                    <span>Your verification code is <code>{{ dev_code }}</code> — visible only while DEBUG=True.</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <div id="otpAlert"
+                 class="error-card otp-alert {% if not error_message and not info_message %}hidden{% endif %} {% if info_message and not error_message %}otp-alert-success{% endif %}"
+                 role="alert">
+                <i class="fa-solid {% if info_message and not error_message %}fa-circle-check{% else %}fa-circle-exclamation{% endif %}"></i>
+                <div><span id="otpAlertText">{% if error_message %}{{ error_message }}{% else %}{{ info_message }}{% endif %}</span></div>
+            </div>
+
+            <form method="POST" action="{% url 'accounts:verify_otp' %}"
+                  class="otp-form" id="otpForm"
+                  data-resend-in="{{ resend_in }}"
+                  data-resend-url="{% url 'accounts:resend_otp' %}"
+                  data-redirect="{% url 'dashboard:index' %}">
+                {% csrf_token %}
+
+                <div class="otp-inputs">
+                    {% for i in "123456"|make_list %}
+                    <input class="otp-input" type="text" name="otp" inputmode="numeric"
+                           autocomplete="one-time-code" maxlength="1"
+                           aria-label="Digit {{ forloop.counter }}"
+                           {% if forloop.first %}autofocus{% endif %}>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="login-btn otp-submit" id="otpSubmit">
+                    <span class="otp-btn-label">Verify &amp; continue</span>
+                </button>
+
+                <p class="otp-resend">
+                    <span>Didn't get the code?</span>
+                    <button type="button" id="otpResend" class="otp-resend-btn" {% if resend_in > 0 %}disabled{% endif %}>
+                        Resend code
+                    </button>
+                    <span id="otpCountdown" class="otp-countdown">{% if resend_in > 0 %}in {{ resend_in }}s{% endif %}</span>
+                </p>
+
+                <p class="otp-tip">
+                    <i class="fa-solid fa-folder-open"></i>
+                    Can't find it? Check your Spam / Promotions folder.
+                </p>
+            </form>
+
+            <p class="signup-link">
+                Wrong email or account?
+                <a href="{% url 'accounts:logout' %}">Use a different one</a>
+            </p>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="login-right">
+
+            <h2>One quick check,<br>then it's all yours.</h2>
+
+            <p>
+                Verifying your email keeps your money workspace secure. You'll only
+                be asked for this once — after that, FinSync AI remembers you.
+            </p>
+
+            <div class="feature-list">
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-shield-halved"></i> Protects your account from intruders
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-envelope-open-text"></i> Statements &amp; alerts reach you
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-clock"></i> Takes less than a minute
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-lock"></i> Verified once — never again
+                </div>
+
+            </div>
+
+            <div class="otp-status-card">
+                <div class="otp-status-row">
+                    <span>Verification status</span>
+                    <strong id="otpStatusChip"><i class="fa-solid fa-hourglass-half"></i> Awaiting code</strong>
+                </div>
+                <div class="otp-progress"><span style="width:50%" id="otpStatusProgress"></span></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="{% static 'js/accounts/verify_otp.js' %}"></script>
+
+{% endblock %}

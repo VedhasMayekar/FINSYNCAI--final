@@ -87,6 +87,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'accounts.middleware.EmailVerificationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -186,3 +187,73 @@ USE_X_FORWARDED_HOST = True
 # ======================================================
 
 BANKHUB_URL = "http://127.0.0.1:8001"
+
+# =======================================================
+# Email OTP verification (Gmail SMTP + Google App Password)
+# Credentials are read ONLY from environment variables —
+# never hardcode them here (see .env).
+# =======================================================
+
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_EMAIL = os.getenv("SMTP_EMAIL", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+
+# Brand name shown in the From header of OTP emails.
+DEFAULT_FROM_EMAIL = f"FinSync AI <{SMTP_EMAIL}>" if SMTP_EMAIL else "FinSync AI"
+
+# OTP policy
+OTP_EXPIRY_MINUTES = 5            # code validity window
+OTP_MAX_ATTEMPTS = 5              # failed tries before a code is invalidated
+OTP_RESEND_COOLDOWN_SECONDS = 60  # minimum gap between two sends
+
+# Dev convenience: show the code on the OTP page while DEBUG=True so the
+# flow is testable even if Gmail filters the email. Ignored in production.
+OTP_SHOW_CODE_IN_DEBUG = True
+
+# -------------------------------------------------------
+# allauth account behaviour — aligned with OTP verification
+# -------------------------------------------------------
+
+# A valid email is mandatory: OTP verification cannot work without one.
+# Social providers that don't share an email (e.g. some Google accounts)
+# get redirected to an email-collection form instead of auto-creating a
+# broken, email-less user that can never receive a code.
+ACCOUNT_EMAIL_REQUIRED = True
+
+# We handle email verification ourselves (5-minute OTP), so disable
+# allauth's built-in email-confirmation machinery to avoid duplicate
+# emails / mandatory pushes.
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+# =======================================================
+# Logging — make OTP/email errors visible everywhere
+# =======================================================
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{levelname}] {asctime} {name}: {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        # OTP / email pipeline — full detail in dev, errors in production
+        "accounts": {
+            "handlers": ["console"],
+            "level": "DEBUG" if os.getenv("DEBUG", "True") == "True" else "WARNING",
+            "propagate": False,
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+}

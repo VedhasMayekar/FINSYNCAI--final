@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from google import genai
@@ -8,7 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
-from .ai_services.chat_service import ChatService
+from .ai_services.chat_service import AIServiceUnavailableError, ChatService
 from ai_memory.services import MemoryService
 
 from .models import AIChatMessage
@@ -16,6 +17,8 @@ from .services import (
     compute_health_score,
     generate_insights,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -72,9 +75,6 @@ def ai_chat(request):
             "message": "AI is not configured. Please contact support.",
         }, status=500)
 
-    # Persist user message
-    AIChatMessage.objects.create(user=request.user, role="user", content=text)
-
     try:
         chat_service = ChatService()
 
@@ -83,9 +83,26 @@ def ai_chat(request):
             user_message=text,
         )
 
-    except Exception as e:
-        reply = f"Sorry, I hit an error reaching the AI: {str(e)}"
+    except AIServiceUnavailableError as e:
+        # Transient Gemini outages (503 high demand, 429 quota) or other
+        # user-safe AI failures — retried inside ChatService first. Show a
+        # friendly message and keep the raw error off the screen and out of
+        # the chat history.
+        logger.warning("AI chat unavailable for user %s: %s", request.user.username, e.friendly_message)
+        return JsonResponse({
+            "success": False,
+            "message": e.friendly_message,
+        }, status=503)
 
+    except Exception as exc:
+        logger.exception("AI chat failed unexpectedly for user %s.", request.user.username)
+        return JsonResponse({
+            "success": False,
+            "message": "Something went wrong while reaching the AI. Please try again.",
+        }, status=500)
+
+    # Persist only successful turns so failed requests never pollute history.
+    AIChatMessage.objects.create(user=request.user, role="user", content=text)
     AIChatMessage.objects.create(user=request.user, role="assistant", content=reply)
 
     try:

@@ -1,0 +1,38 @@
+[WARNING] 2026-10-04 21:06:33,656 ai.views: AI chat unavailable for user aichatsmoke: AI is unusually busy right now. Please try again in a few seconds — this usually clears up quickly.
+Service Unavailable: /ai/chat/
+[ERROR] 2026-10-04 21:06:33,663 django.request: Service Unavailable: /ai/chat/
+[WARNING] 2026-10-04 21:06:34,155 ai.ai_services.chat_service: Gemini transient error (HTTP 503) on attempt 1/3 — retrying in 1.0s.
+[WARNING] 2026-10-04 21:06:35,156 ai.ai_services.chat_service: Gemini transient error (HTTP 503) on attempt 2/3 — retrying in 2.0s.
+[WARNING] 2026-10-04 21:06:37,206 ai.ai_services.chat_service: Gemini transient error (HTTP 503) on attempt 1/3 — retrying in 1.0s.
+[WARNING] 2026-10-04 21:06:38,208 ai.ai_services.chat_service: Gemini transient error (HTTP 503) on attempt 2/3 — retrying in 2.0s.
+[WARNING] 2026-10-04 21:06:40,209 ai.ai_services.chat_service: Gemini still busy after 3 attempts (HTTP 503).
+[ERROR] 2026-10-04 21:06:40,247 ai.ai_services.chat_service: Gemini request failed (HTTP 400).
+Traceback (most recent call last):
+  File "C:\TY Pro\FinSyncAI-v2\f3\backend\ai\ai_services\chat_service.py", line 120, in generate_response
+    return self._generate(prompt)
+           ~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\TY Pro\FinSyncAI-v2\f3\backend\_ai_chat_test.py", line 100, in bad_request
+    raise ClientError(400, {'error': {'message': 'bad prompt'}})
+google.genai.errors.ClientError: 400 None. {'error': {'message': 'bad prompt'}}
+[ERROR] 2026-10-04 21:06:40,265 ai.views: AI chat failed unexpectedly for user aichatsmoke.
+Traceback (most recent call last):
+  File "C:\TY Pro\FinSyncAI-v2\f3\backend\ai\views.py", line 81, in ai_chat
+    reply = chat_service.generate_response(
+        user=request.user,
+        user_message=text,
+    )
+  File "C:\TY Pro\FinSyncAI-v2\f3\backend\_ai_chat_test.py", line 115, in generate_response
+    raise RuntimeError('boom')
+RuntimeError: boom
+Internal Server Error: /ai/chat/
+[ERROR] 2026-10-04 21:06:40,269 django.request: Internal Server Error: /ai/chat/
+fail-503 status: 503 | success: False
+fail-503 message: AI is unusually busy right now. Please try again in a few seconds — this usually clears up quickly.
+rows after failure: 0
+ok status: 200 | reply: Here is your reply.
+rows after success: 2
+retry calls: 3 | reply: recovered reply
+exhausted attempts: 3 | message: AI is unusually busy right now. Please try again in a few seconds — this usually clears up quickly.
+bad-request attempts: 1 | message: The AI couldn't process that request. Please try rephrasing.
+boom status: 500 | success: False
+AI CHAT ERROR HANDLING TEST OK
